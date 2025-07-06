@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}All Posts - Medium{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-4xl font-bold text-medium-primary mb-4">All Stories</h1>
+    <p class="text-medium-secondary">Discover stories from writers around the world</p>
+</div>
+
+<!-- Filter and Search -->
+<div class="mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+    <div class="flex gap-2 flex-wrap">
+        <span class="text-medium-secondary">Filter by:</span>
+        <a href="{{ url_for('all_posts') }}" class="px-3 py-1 rounded-full bg-medium-accent text-white text-sm">All</a>
+        {% set categories = ['Technology', 'Business', 'Health', 'Entertainment', 'Food & Drink', 'Fashion & Beauty', 'Art & Culture', 'Finance & Business', 'Science', 'Travel', 'Sports', 'Education'] %}
+        {% for category in categories %}
+        <a href="{{ url_for('category_posts', category=category) }}" 
+           class="px-3 py-1 rounded-full bg-medium-muted text-medium-primary text-sm hover:bg-medium-border transition-colors">
+            {{ category }}
+        </a>
+        {% endfor %}
+    </div>
+    
+    <div class="relative">
+        <input type="text" id="search" placeholder="Search stories..." 
+               class="input-field pl-10 w-64">
+        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-medium-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+    </div>
+</div>
+
+<!-- Posts Grid -->
+{% if posts %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for post in posts %}
+    <article class="card hover:shadow-lg transition-shadow duration-300">
+        <div class="aspect-w-16 aspect-h-9">
+            <img src="{{ post.featured_image }}" alt="{{ post.title }}" class="w-full h-48 object-cover">
+        </div>
+        <div class="p-6">
+            <div class="flex items-center mb-3">
+                <img src="{{ post.user.profile_pic }}" alt="{{ post.user.username }}" class="w-8 h-8 rounded-full mr-3">
+                <div>
+                    <span class="text-sm font-medium text-medium-primary">{{ post.user.username }}</span>
+                    <div class="text-xs text-medium-secondary">{{ post.created_at }}</div>
+                </div>
+            </div>
+            <h3 class="text-xl font-bold text-medium-primary mb-2 line-clamp-2">
+                <a href="{{ url_for('post_detail', post_id=post.id) }}" class="hover:text-medium-accent transition-colors">
+                    {{ post.title }}
+                </a>
+            </h3>
+            <p class="text-medium-secondary mb-4 line-clamp-3">{{ post.subtitle }}</p>
+            <div class="flex items-center justify-between">
+                <span class="px-2 py-1 bg-medium-muted text-medium-primary text-xs rounded-full">{{ post.category }}</span>
+                <div class="flex items-center text-sm text-medium-secondary">
+                    <span>{{ post.comments|length }} comments</span>
+                </div>
+            </div>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+
+<!-- Load More Button -->
+<div class="text-center mt-12">
+    <button class="btn-secondary px-8 py-3">
+        Load more stories
+    </button>
+</div>
+
+{% else %}
+<div class="text-center py-16">
+    <div class="mb-6">
+        <svg class="mx-auto h-16 w-16 text-medium-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+    </div>
+    <h3 class="text-xl font-semibold text-medium-primary mb-2">No stories found</h3>
+    <p class="text-medium-secondary mb-6">Try adjusting your search or filter criteria.</p>
+    {% if session.user_id %}
+    <a href="{{ url_for('create_post') }}" class="btn-primary">
+        Write your first story
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
+<script>
+// Simple search functionality
+document.getElementById('search').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const articles = document.querySelectorAll('article');
+    
+    articles.forEach(article => {
+        const title = article.querySelector('h3').textContent.toLowerCase();
+        const subtitle = article.querySelector('p').textContent.toLowerCase();
+        const author = article.querySelector('.text-sm.font-medium').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || subtitle.includes(searchTerm) || author.includes(searchTerm)) {
+            article.style.display = 'block';
+        } else {
+            article.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %} 

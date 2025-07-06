@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}'s Profile - Medium{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Profile Header -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+        <div class="flex items-center space-x-6">
+            <div class="w-24 h-24 bg-medium-muted rounded-full flex items-center justify-center">
+                <span class="text-3xl font-bold text-medium-primary">{{ user.username[:2].upper() }}</span>
+            </div>
+            <div class="flex-1">
+                <h1 class="text-3xl font-bold text-medium-primary mb-2">{{ user.username }}</h1>
+                <p class="text-medium-secondary mb-4">Member since {{ user.created_at if user.created_at else 'Recently' }}</p>
+                <div class="flex items-center space-x-6 text-sm text-medium-secondary">
+                    <span>{{ posts|length }} stories published</span>
+                    <span>0 followers</span>
+                    <span>0 following</span>
+                </div>
+            </div>
+            <div class="flex space-x-3">
+                <a href="{{ url_for('create_post') }}" class="btn-primary">
+                    Write a story
+                </a>
+                <button class="btn-secondary">
+                    Follow
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Navigation -->
+    <div class="border-b border-medium-border mb-8">
+        <nav class="flex space-x-8">
+            <a href="#stories" class="border-b-2 border-medium-accent text-medium-accent py-4 font-medium">
+                Stories
+            </a>
+            <a href="#about" class="text-medium-secondary hover:text-medium-primary py-4 font-medium">
+                About
+            </a>
+            <a href="#followers" class="text-medium-secondary hover:text-medium-primary py-4 font-medium">
+                Followers
+            </a>
+        </nav>
+    </div>
+
+    <!-- Stories Section -->
+    <section id="stories" class="mb-12">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-medium-primary">Stories</h2>
+            <div class="flex items-center space-x-2 text-sm text-medium-secondary">
+                <span>Sort by:</span>
+                <select class="border border-medium-border rounded px-2 py-1">
+                    <option>Latest</option>
+                    <option>Popular</option>
+                    <option>Oldest</option>
+                </select>
+            </div>
+        </div>
+
+        {% if posts %}
+        <div class="space-y-6">
+            {% for post in posts %}
+            <article class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="md:flex">
+                    {% if post.featured_image %}
+                    <div class="md:w-1/3">
+                        <img src="{{ post.featured_image }}" alt="{{ post.title }}" 
+                             class="w-full h-48 md:h-full object-cover">
+                    </div>
+                    {% endif %}
+                    <div class="p-6 md:w-2/3">
+                        <div class="flex items-center mb-3">
+                            <span class="px-2 py-1 bg-medium-muted text-medium-primary text-xs rounded-full">
+                                {{ post.category }}
+                            </span>
+                            <span class="text-sm text-medium-secondary ml-3">{{ post.created_at }}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-medium-primary mb-2">
+                            <a href="{{ url_for('post_detail', post_id=post.id) }}" 
+                               class="hover:text-medium-accent transition-colors">
+                                {{ post.title }}
+                            </a>
+                        </h3>
+                        <p class="text-medium-secondary mb-4 line-clamp-3">{{ post.subtitle }}</p>
+                        <div class="flex items-center justify-between text-sm text-medium-secondary">
+                            <span>{{ post.comments|length }} comments</span>
+                            <div class="flex items-center space-x-4">
+                                <button class="flex items-center space-x-1 hover:text-medium-accent transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                    <span>Like</span>
+                                </button>
+                                <button class="flex items-center space-x-1 hover:text-medium-accent transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                                    </svg>
+                                    <span>Share</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+            <div class="mb-6">
+                <svg class="mx-auto h-16 w-16 text-medium-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-medium-primary mb-2">No stories yet</h3>
+            <p class="text-medium-secondary mb-6">Start writing to share your ideas with the world.</p>
+            <a href="{{ url_for('create_post') }}" class="btn-primary">
+                Write your first story
+            </a>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="mb-12">
+        <h2 class="text-2xl font-bold text-medium-primary mb-6">About</h2>
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <p class="text-medium-secondary">
+                This is where you can share more about yourself, your interests, and what you write about.
+                You can edit this section to tell your story and connect with readers.
+            </p>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-medium-primary mb-6">Stats</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-3xl font-bold text-medium-accent mb-2">{{ posts|length }}</div>
+                <div class="text-medium-secondary">Stories Published</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-3xl font-bold text-medium-accent mb-2">0</div>
+                <div class="text-medium-secondary">Total Views</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-3xl font-bold text-medium-accent mb-2">0</div>
+                <div class="text-medium-secondary">Total Likes</div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %} 

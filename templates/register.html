@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - Medium{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-bold text-medium-primary">
+                Join Medium
+            </h2>
+            <p class="mt-2 text-center text-sm text-medium-secondary">
+                Or
+                <a href="{{ url_for('login') }}" class="font-medium text-medium-accent hover:text-green-700">
+                    sign in to your account
+                </a>
+            </p>
+        </div>
+        
+        <form class="mt-8 space-y-6" method="POST">
+            <div class="space-y-4">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-medium-primary mb-2">
+                        Username
+                    </label>
+                    <input id="username" name="username" type="text" required 
+                           class="input-field" placeholder="Choose a username">
+                    <p class="mt-1 text-xs text-medium-secondary">
+                        This will be your public username on Medium
+                    </p>
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-medium-primary mb-2">
+                        Password
+                    </label>
+                    <input id="password" name="password" type="password" required 
+                           class="input-field" placeholder="Create a password">
+                    <p class="mt-1 text-xs text-medium-secondary">
+                        Must be at least 6 characters long
+                    </p>
+                </div>
+                
+                <div>
+                    <label for="confirm_password" class="block text-sm font-medium text-medium-primary mb-2">
+                        Confirm Password
+                    </label>
+                    <input id="confirm_password" name="confirm_password" type="password" required 
+                           class="input-field" placeholder="Confirm your password">
+                </div>
+            </div>
+
+            <div class="flex items-center">
+                <input id="agree-terms" name="agree-terms" type="checkbox" required
+                       class="h-4 w-4 text-medium-accent focus:ring-medium-accent border-medium-border rounded">
+                <label for="agree-terms" class="ml-2 block text-sm text-medium-secondary">
+                    I agree to the
+                    <a href="#" class="text-medium-accent hover:text-green-700">Terms of Service</a>
+                    and
+                    <a href="#" class="text-medium-accent hover:text-green-700">Privacy Policy</a>
+                </label>
+            </div>
+
+            <div>
+                <button type="submit" class="group relative w-full btn-primary py-3 text-lg">
+                    Create account
+                </button>
+            </div>
+        </form>
+
+        <!-- Benefits -->
+        <div class="mt-8 p-6 bg-medium-muted rounded-lg">
+            <h3 class="text-lg font-semibold text-medium-primary mb-4">Why join Medium?</h3>
+            <ul class="space-y-3 text-sm text-medium-secondary">
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-medium-accent mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Share your stories with millions of readers
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-medium-accent mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Connect with writers and readers worldwide
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-medium-accent mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Discover stories on topics you love
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-medium-accent mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Build your personal brand and audience
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %} 

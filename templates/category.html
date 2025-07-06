@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category }} - Medium{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <div class="flex items-center space-x-4 mb-4">
+        <a href="{{ url_for('all_posts') }}" class="text-medium-accent hover:text-green-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </a>
+        <h1 class="text-4xl font-bold text-medium-primary">{{ category }}</h1>
+    </div>
+    <p class="text-medium-secondary">{{ posts|length }} stories in {{ category }}</p>
+</div>
+
+<!-- Category Description -->
+<div class="bg-medium-muted rounded-lg p-6 mb-8">
+    <h2 class="text-xl font-semibold text-medium-primary mb-2">About {{ category }}</h2>
+    <p class="text-medium-secondary">
+        {% if category == 'Technology' %}
+        Discover the latest in tech trends, programming, AI, and digital innovation.
+        {% elif category == 'Business' %}
+        Insights on entrepreneurship, management, strategy, and business growth.
+        {% elif category == 'Health' %}
+        Wellness tips, medical insights, fitness advice, and mental health support.
+        {% elif category == 'Entertainment' %}
+        Movie reviews, music, TV shows, and pop culture discussions.
+        {% elif category == 'Food & Drink' %}
+        Recipes, restaurant reviews, cooking tips, and culinary adventures.
+        {% elif category == 'Fashion & Beauty' %}
+        Style guides, beauty tips, fashion trends, and lifestyle advice.
+        {% elif category == 'Art & Culture' %}
+        Art history, cultural insights, creative inspiration, and artistic expression.
+        {% elif category == 'Finance & Business' %}
+        Investment advice, financial planning, market analysis, and economic insights.
+        {% elif category == 'Science' %}
+        Scientific discoveries, research findings, and explanations of complex concepts.
+        {% elif category == 'Travel' %}
+        Travel guides, destination reviews, and adventure stories from around the world.
+        {% elif category == 'Sports' %}
+        Sports analysis, athlete profiles, game reviews, and fitness content.
+        {% elif category == 'Education' %}
+        Learning resources, educational insights, and academic discussions.
+        {% else %}
+        Explore stories and insights in {{ category }}.
+        {% endif %}
+    </p>
+</div>
+
+<!-- Posts Grid -->
+{% if posts %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for post in posts %}
+    <article class="card hover:shadow-lg transition-shadow duration-300">
+        <div class="aspect-w-16 aspect-h-9">
+            <img src="{{ post.featured_image }}" alt="{{ post.title }}" class="w-full h-48 object-cover">
+        </div>
+        <div class="p-6">
+            <div class="flex items-center mb-3">
+                <img src="{{ post.user.profile_pic }}" alt="{{ post.user.username }}" class="w-8 h-8 rounded-full mr-3">
+                <div>
+                    <span class="text-sm font-medium text-medium-primary">{{ post.user.username }}</span>
+                    <div class="text-xs text-medium-secondary">{{ post.created_at }}</div>
+                </div>
+            </div>
+            <h3 class="text-xl font-bold text-medium-primary mb-2 line-clamp-2">
+                <a href="{{ url_for('post_detail', post_id=post.id) }}" class="hover:text-medium-accent transition-colors">
+                    {{ post.title }}
+                </a>
+            </h3>
+            <p class="text-medium-secondary mb-4 line-clamp-3">{{ post.subtitle }}</p>
+            <div class="flex items-center justify-between">
+                <span class="px-2 py-1 bg-medium-muted text-medium-primary text-xs rounded-full">{{ post.category }}</span>
+                <div class="flex items-center text-sm text-medium-secondary">
+                    <span>{{ post.comments|length }} comments</span>
+                </div>
+            </div>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+
+<!-- Load More Button -->
+<div class="text-center mt-12">
+    <button class="btn-secondary px-8 py-3">
+        Load more {{ category }} stories
+    </button>
+</div>
+
+{% else %}
+<div class="text-center py-16">
+    <div class="mb-6">
+        <svg class="mx-auto h-16 w-16 text-medium-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+    </div>
+    <h3 class="text-xl font-semibold text-medium-primary mb-2">No stories in {{ category }} yet</h3>
+    <p class="text-medium-secondary mb-6">Be the first to write about {{ category }}!</p>
+    {% if session.user_id %}
+    <a href="{{ url_for('create_post') }}" class="btn-primary">
+        Write a {{ category }} story
+    </a>
+    {% else %}
+    <a href="{{ url_for('register') }}" class="btn-primary">
+        Join Medium to write
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Related Categories -->
+<section class="mt-16 border-t border-medium-border pt-8">
+    <h2 class="text-2xl font-bold text-medium-primary mb-6">Explore More Categories</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {% set categories = ['Technology', 'Business', 'Health', 'Entertainment', 'Food & Drink', 'Fashion & Beauty', 'Art & Culture', 'Finance & Business', 'Science', 'Travel', 'Sports', 'Education'] %}
+        {% for cat in categories %}
+        {% if cat != category %}
+        <a href="{{ url_for('category_posts', category=cat) }}" 
+           class="bg-medium-muted hover:bg-medium-border text-medium-primary px-4 py-3 rounded-lg text-center font-medium transition-colors">
+            {{ cat }}
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
+{% endblock %} 

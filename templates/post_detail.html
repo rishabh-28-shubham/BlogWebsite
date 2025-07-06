@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} - Medium{% endblock %}
+
+{% block content %}
+<article class="max-w-4xl mx-auto">
+    <!-- Article Header -->
+    <header class="mb-8">
+        <div class="flex items-center mb-4">
+            <img src="{{ post.user.profile_pic }}" alt="{{ post.user.username }}" class="w-12 h-12 rounded-full mr-4">
+            <div>
+                <h3 class="font-medium text-medium-primary">{{ post.user.username }}</h3>
+                <p class="text-sm text-medium-secondary">{{ post.created_at }}</p>
+            </div>
+        </div>
+        
+        <h1 class="text-4xl font-bold text-medium-primary mb-4">{{ post.title }}</h1>
+        <p class="text-xl text-medium-secondary mb-6">{{ post.subtitle }}</p>
+        
+        <div class="flex items-center gap-4 text-sm text-medium-secondary">
+            <span class="px-3 py-1 bg-medium-muted rounded-full">{{ post.category }}</span>
+            <span>{{ post.comments|length }} comments</span>
+            <span>{{ post.created_at }}</span>
+        </div>
+    </header>
+
+    <!-- Featured Image -->
+    {% if post.featured_image %}
+    <div class="mb-8">
+        <img src="{{ post.featured_image }}" alt="{{ post.title }}" class="w-full h-96 object-cover rounded-lg">
+    </div>
+    {% endif %}
+
+    <!-- Article Content -->
+    <div class="prose prose-lg max-w-none mb-12">
+        {{ post.main_content|safe }}
+    </div>
+
+    <!-- Article Footer -->
+    <footer class="border-t border-medium-border pt-8 mb-12">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <button class="flex items-center space-x-2 text-medium-secondary hover:text-medium-accent transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                    <span>Like</span>
+                </button>
+                <button class="flex items-center space-x-2 text-medium-secondary hover:text-medium-accent transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                    </svg>
+                    <span>Share</span>
+                </button>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <span class="text-medium-secondary text-sm">Written by</span>
+                <span class="font-medium text-medium-primary">{{ post.user.username }}</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Comments Section -->
+    <section class="border-t border-medium-border pt-8">
+        <h3 class="text-2xl font-bold text-medium-primary mb-6">
+            Comments ({{ post.comments|length }})
+        </h3>
+
+        {% if session.user_id %}
+        <!-- Add Comment Form -->
+        <div class="mb-8">
+            <form method="POST" action="#" class="space-y-4">
+                <div>
+                    <textarea name="comment" rows="4" placeholder="Write a comment..." 
+                              class="input-field resize-none"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">
+                    Post Comment
+                </button>
+            </form>
+        </div>
+        {% else %}
+        <div class="mb-8 p-4 bg-medium-muted rounded-lg text-center">
+            <p class="text-medium-secondary mb-2">Please <a href="{{ url_for('login') }}" class="text-medium-accent hover:text-green-700">sign in</a> to leave a comment.</p>
+        </div>
+        {% endif %}
+
+        <!-- Comments List -->
+        {% if post.comments %}
+        <div class="space-y-6">
+            {% for comment in post.comments %}
+            <div class="border-b border-medium-border pb-6 last:border-b-0">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-medium-muted rounded-full flex items-center justify-center">
+                        <span class="text-sm font-medium text-medium-primary">{{ comment.user_id[:2].upper() }}</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="font-medium text-medium-primary">User</span>
+                            <span class="text-sm text-medium-secondary">{{ comment.created_at }}</span>
+                        </div>
+                        <p class="text-medium-primary">{{ comment.main_content }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-8">
+            <p class="text-medium-secondary">No comments yet. Be the first to comment!</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- Related Posts -->
+    <section class="mt-16 border-t border-medium-border pt-8">
+        <h3 class="text-2xl font-bold text-medium-primary mb-6">More from {{ post.user.username }}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- This would show other posts by the same author -->
+            <div class="text-center py-8">
+                <p class="text-medium-secondary">No other posts from this author yet.</p>
+            </div>
+        </div>
+    </section>
+</article>
+
+<style>
+.prose {
+    color: #242424;
+    line-height: 1.8;
+}
+
+.prose h1 {
+    color: #242424;
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.prose h2 {
+    color: #242424;
+    font-size: 1.875rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.prose h3 {
+    color: #242424;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.prose p {
+    margin-bottom: 1.5rem;
+    color: #242424;
+}
+
+.prose blockquote {
+    border-left: 4px solid #1A8917;
+    padding-left: 1rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #6B6B6B;
+}
+
+.prose blockquote p {
+    margin: 0;
+}
+
+.prose ul, .prose ol {
+    margin: 1.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.prose li {
+    margin-bottom: 0.5rem;
+}
+
+.prose a {
+    color: #1A8917;
+    text-decoration: underline;
+}
+
+.prose a:hover {
+    color: #0f5f0f;
+}
+</style>
+{% endblock %} 

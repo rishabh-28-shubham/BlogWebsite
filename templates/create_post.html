@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Write a Story - Medium{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-medium-primary mb-2">Write a story</h1>
+        <p class="text-medium-secondary">Share your ideas with millions of readers.</p>
+    </div>
+
+    <form method="POST" class="space-y-8">
+        <!-- Title -->
+        <div>
+            <label for="title" class="block text-sm font-medium text-medium-primary mb-2">
+                Title *
+            </label>
+            <input type="text" id="title" name="title" required 
+                   class="input-field text-2xl font-bold" 
+                   placeholder="Your story title">
+        </div>
+
+        <!-- Subtitle -->
+        <div>
+            <label for="subtitle" class="block text-sm font-medium text-medium-primary mb-2">
+                Subtitle
+            </label>
+            <input type="text" id="subtitle" name="subtitle" 
+                   class="input-field text-lg" 
+                   placeholder="Brief description of your story">
+        </div>
+
+        <!-- Summary -->
+        <div>
+            <label for="summary" class="block text-sm font-medium text-medium-primary mb-2">
+                Summary
+            </label>
+            <textarea id="summary" name="summary" rows="3" 
+                      class="input-field resize-none" 
+                      placeholder="A brief summary of your story"></textarea>
+        </div>
+
+        <!-- Category -->
+        <div>
+            <label for="category" class="block text-sm font-medium text-medium-primary mb-2">
+                Category *
+            </label>
+            <select id="category" name="category" required class="input-field">
+                <option value="">Select a category</option>
+                <option value="Technology">Technology</option>
+                <option value="Business">Business</option>
+                <option value="Health">Health</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Food & Drink">Food & Drink</option>
+                <option value="Fashion & Beauty">Fashion & Beauty</option>
+                <option value="Art & Culture">Art & Culture</option>
+                <option value="Finance & Business">Finance & Business</option>
+                <option value="Science">Science</option>
+                <option value="Travel">Travel</option>
+                <option value="Sports">Sports</option>
+                <option value="Education">Education</option>
+            </select>
+        </div>
+
+        <!-- Featured Image -->
+        <div>
+            <label for="featured_image" class="block text-sm font-medium text-medium-primary mb-2">
+                Featured Image URL
+            </label>
+            <input type="url" id="featured_image" name="featured_image" 
+                   class="input-field" 
+                   placeholder="https://example.com/image.jpg">
+            <p class="mt-1 text-xs text-medium-secondary">
+                Enter a URL for your story's featured image
+            </p>
+        </div>
+
+        <!-- Main Content -->
+        <div>
+            <label for="main_content" class="block text-sm font-medium text-medium-primary mb-2">
+                Story Content *
+            </label>
+            <div class="border border-medium-border rounded-lg">
+                <!-- Toolbar -->
+                <div class="border-b border-medium-border p-3 bg-medium-muted">
+                    <div class="flex items-center space-x-2">
+                        <button type="button" onclick="formatText('bold')" 
+                                class="p-2 hover:bg-white rounded" title="Bold">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                        </button>
+                        <button type="button" onclick="formatText('italic')" 
+                                class="p-2 hover:bg-white rounded" title="Italic">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 4v12m0-12l4 6m-4-6l-4 6"/>
+                            </svg>
+                        </button>
+                        <button type="button" onclick="insertHeading()" 
+                                class="p-2 hover:bg-white rounded" title="Heading">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 4h14M3 8h14M3 12h10"/>
+                            </svg>
+                        </button>
+                        <button type="button" onclick="insertQuote()" 
+                                class="p-2 hover:bg-white rounded" title="Quote">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 4h14M3 8h14M3 12h10"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Editor -->
+                <textarea id="main_content" name="main_content" required rows="20" 
+                          class="w-full p-4 border-0 focus:outline-none resize-none" 
+                          placeholder="Tell your story...&#10;&#10;You can use HTML tags for formatting:&#10;&#10;&lt;h1&gt;Your Heading&lt;/h1&gt;&#10;&lt;p&gt;Your paragraph&lt;/p&gt;&#10;&lt;blockquote&gt;Your quote&lt;/blockquote&gt;&#10;&lt;ul&gt;&#10;  &lt;li&gt;List item 1&lt;/li&gt;&#10;  &lt;li&gt;List item 2&lt;/li&gt;&#10;&lt;/ul&gt;"></textarea>
+            </div>
+            <p class="mt-1 text-xs text-medium-secondary">
+                Use HTML tags for formatting. Example: &lt;h1&gt;Heading&lt;/h1&gt;, &lt;p&gt;Paragraph&lt;/p&gt;, &lt;blockquote&gt;Quote&lt;/blockquote&gt;
+            </p>
+        </div>
+
+        <!-- Preview -->
+        <div>
+            <button type="button" onclick="togglePreview()" 
+                    class="btn-secondary mb-4">
+                Preview Story
+            </button>
+            <div id="preview" class="hidden border border-medium-border rounded-lg p-6 bg-white">
+                <h3 class="text-lg font-semibold text-medium-primary mb-4">Preview:</h3>
+                <div id="preview-content"></div>
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="flex justify-end space-x-4 pt-6 border-t border-medium-border">
+            <button type="button" onclick="saveDraft()" class="btn-secondary">
+                Save Draft
+            </button>
+            <button type="submit" class="btn-primary">
+                Publish Story
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function formatText(command) {
+    const textarea = document.getElementById('main_content');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    
+    let replacement = '';
+    switch(command) {
+        case 'bold':
+            replacement = `<strong>${selectedText}</strong>`;
+            break;
+        case 'italic':
+            replacement = `<em>${selectedText}</em>`;
+            break;
+    }
+    
+    textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+    textarea.focus();
+    textarea.setSelectionRange(start + replacement.length, start + replacement.length);
+}
+
+function insertHeading() {
+    const textarea = document.getElementById('main_content');
+    const cursorPos = textarea.selectionStart;
+    const textBefore = textarea.value.substring(0, cursorPos);
+    const textAfter = textarea.value.substring(cursorPos);
+    
+    textarea.value = textBefore + '\n<h1>Your Heading</h1>\n' + textAfter;
+    textarea.focus();
+    textarea.setSelectionRange(cursorPos + 15, cursorPos + 26);
+}
+
+function insertQuote() {
+    const textarea = document.getElementById('main_content');
+    const cursorPos = textarea.selectionStart;
+    const textBefore = textarea.value.substring(0, cursorPos);
+    const textAfter = textarea.value.substring(cursorPos);
+    
+    textarea.value = textBefore + '\n<blockquote>\n  <p>Your quote here</p>\n</blockquote>\n' + textAfter;
+    textarea.focus();
+    textarea.setSelectionRange(cursorPos + 30, cursorPos + 45);
+}
+
+function togglePreview() {
+    const preview = document.getElementById('preview');
+    const previewContent = document.getElementById('preview-content');
+    const mainContent = document.getElementById('main_content').value;
+    
+    if (preview.classList.contains('hidden')) {
+        previewContent.innerHTML = mainContent;
+        preview.classList.remove('hidden');
+    } else {
+        preview.classList.add('hidden');
+    }
+}
+
+function saveDraft() {
+    // This would typically save to localStorage or send to server
+    alert('Draft saved! (This is a demo - no actual saving occurs)');
+}
+</script>
+{% endblock %} 

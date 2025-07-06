@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - Medium{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-bold text-medium-primary">
+                Sign in to Medium
+            </h2>
+            <p class="mt-2 text-center text-sm text-medium-secondary">
+                Or
+                <a href="{{ url_for('register') }}" class="font-medium text-medium-accent hover:text-green-700">
+                    create a new account
+                </a>
+            </p>
+        </div>
+        
+        <form class="mt-8 space-y-6" method="POST">
+            <div class="space-y-4">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-medium-primary mb-2">
+                        Username
+                    </label>
+                    <input id="username" name="username" type="text" required 
+                           class="input-field" placeholder="Enter your username">
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-medium-primary mb-2">
+                        Password
+                    </label>
+                    <input id="password" name="password" type="password" required 
+                           class="input-field" placeholder="Enter your password">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input id="remember-me" name="remember-me" type="checkbox" 
+                           class="h-4 w-4 text-medium-accent focus:ring-medium-accent border-medium-border rounded">
+                    <label for="remember-me" class="ml-2 block text-sm text-medium-secondary">
+                        Remember me
+                    </label>
+                </div>
+
+                <div class="text-sm">
+                    <a href="#" class="font-medium text-medium-accent hover:text-green-700">
+                        Forgot your password?
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="group relative w-full btn-primary py-3 text-lg">
+                    Sign in
+                </button>
+            </div>
+
+            <div class="text-center">
+                <p class="text-sm text-medium-secondary">
+                    By signing in, you agree to our
+                    <a href="#" class="text-medium-accent hover:text-green-700">Terms of Service</a>
+                    and
+                    <a href="#" class="text-medium-accent hover:text-green-700">Privacy Policy</a>
+                </p>
+            </div>
+        </form>
+
+        <!-- Demo Accounts -->
+        <div class="mt-8 p-4 bg-medium-muted rounded-lg">
+            <h3 class="text-sm font-medium text-medium-primary mb-3">Demo Accounts:</h3>
+            <div class="space-y-2 text-xs text-medium-secondary">
+                <div><strong>Username:</strong> alycia662571 <strong>Password:</strong> heath123</div>
+                <div><strong>Username:</strong> lesch.blaise5895 <strong>Password:</strong> john123</div>
+                <div><strong>Username:</strong> zbradtke7096 <strong>Password:</strong> sara123</div>
+                <div><strong>Username:</strong> mattie.batz4359 <strong>Password:</strong> mike123</div>
+                <div><strong>Username:</strong> domingo749552 <strong>Password:</strong> linda123</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

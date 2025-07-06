@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Medium - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-medium-highlight py-16 mb-12">
+    <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-5xl font-bold text-medium-primary mb-6">
+            Stay curious.
+        </h1>
+        <p class="text-xl text-medium-secondary mb-8 max-w-2xl mx-auto">
+            Discover stories, thinking, and expertise from writers on any topic.
+        </p>
+        {% if not session.user_id %}
+        <div class="flex justify-center space-x-4">
+            <a href="{{ url_for('register') }}" class="btn-primary text-lg px-8 py-3">
+                Start reading
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Featured Posts Section -->
+<section class="mb-12">
+    <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold text-medium-primary">Featured Stories</h2>
+        <a href="{{ url_for('all_posts') }}" class="text-medium-accent hover:text-green-700 font-medium transition-colors">
+            View all stories →
+        </a>
+    </div>
+
+    {% if posts %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for post in posts %}
+        <article class="card hover:shadow-lg transition-shadow duration-300">
+            <div class="aspect-w-16 aspect-h-9">
+                <img src="{{ post.featured_image }}" alt="{{ post.title }}" class="w-full h-48 object-cover">
+            </div>
+            <div class="p-6">
+                <div class="flex items-center mb-3">
+                    <img src="{{ post.user.profile_pic }}" alt="{{ post.user.username }}" class="w-8 h-8 rounded-full mr-3">
+                    <span class="text-sm text-medium-secondary">{{ post.user.username }}</span>
+                </div>
+                <h3 class="text-xl font-bold text-medium-primary mb-2 line-clamp-2">
+                    <a href="{{ url_for('post_detail', post_id=post.id) }}" class="hover:text-medium-accent transition-colors">
+                        {{ post.title }}
+                    </a>
+                </h3>
+                <p class="text-medium-secondary mb-4 line-clamp-3">{{ post.subtitle }}</p>
+                <div class="flex items-center justify-between text-sm text-medium-secondary">
+                    <span>{{ post.category }}</span>
+                    <span>{{ post.created_at }}</span>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-12">
+        <p class="text-medium-secondary text-lg">No posts available yet.</p>
+        {% if session.user_id %}
+        <a href="{{ url_for('create_post') }}" class="btn-primary mt-4 inline-block">
+            Write your first story
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
+
+<!-- Categories Section -->
+<section class="mb-12">
+    <h2 class="text-3xl font-bold text-medium-primary mb-8">Explore Topics</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {% set categories = ['Technology', 'Business', 'Health', 'Entertainment', 'Food & Drink', 'Fashion & Beauty', 'Art & Culture', 'Finance & Business', 'Science', 'Travel', 'Sports', 'Education'] %}
+        {% for category in categories %}
+        <a href="{{ url_for('category_posts', category=category) }}" 
+           class="bg-medium-muted hover:bg-medium-border text-medium-primary px-4 py-3 rounded-lg text-center font-medium transition-colors">
+            {{ category }}
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Call to Action -->
+{% if not session.user_id %}
+<section class="bg-medium-muted rounded-lg p-8 text-center">
+    <h2 class="text-2xl font-bold text-medium-primary mb-4">Join Medium</h2>
+    <p class="text-medium-secondary mb-6 max-w-md mx-auto">
+        Get unlimited access to the best stories on Medium — and support writers while you're at it.
+    </p>
+    <a href="{{ url_for('register') }}" class="btn-primary">
+        Get unlimited access
+    </a>
+</section>
+{% endif %}
+{% endblock %} 
